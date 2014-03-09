@@ -1,1 +1,16 @@
-TODO: all of this page.. check out it's route!
+<!DOCTYPE html>
+<html>
+<head>
+    <title>tic-tac-socketio</title>
+</head>
+<body>
+<% for(var x = 0; x< 3; x++){ %>
+<div class="row">
+    <%  for(var y = 0; y< 3; y++){ %>
+    <div id="<%= 3*x + y %>"> </div>
+<% } %>
+</div>
+<% } %>
+
+</body>
+</html>
