@@ -10,11 +10,31 @@ var gMan = function() {
 
     // It has to be the player's turn, and the box has to have no move for the move to be valid.
     var moveValid = function(rowInd, colInd, player) {
+        console.log("row: "+rowInd+", col: "+colInd);
+        console.log(boardState);
         if (isCurrentPlayer(player) && boardState[rowInd][colInd] == empty) {
+
             return true;
         }
         return false;
     };
+
+    this.assignPlayer = function(userID) {
+        if(!playerXID) playerXID = userID;
+        else if(!playerOID && userID!=playerXID) playerOID = userID;
+        else return; // you are a viewer
+    }
+
+    this.gameData = function (userID) {
+        var name = userIDtoSymbol(userID);
+        var data = {
+            playerName: name,
+            grid: boardState,
+            isYourTurn: isCurrentPlayer(name)
+        }
+        console.log(data);
+        return data;
+    }
 
     var userIDtoSymbol = function(userID) {
         if (userID == playerXID) return 'X';
@@ -30,6 +50,7 @@ var gMan = function() {
             nextTurn();
             return true;
         }
+        console.log("invalid move!")
         return false;
     }
 

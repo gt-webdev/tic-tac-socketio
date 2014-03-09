@@ -6,15 +6,23 @@
 <body>
 <style>
     .box {
-        height: 200px;
-        width: 200px;
+        height: 150px;
+        width: 150px;
         background-color: red;
         border-width: 5px;
         border: black;
         border-style: solid;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 150px;
     }
 </style>
-<h1>You are: </h1>
+<h1>You are: <%= gameData.playerName %> </h1>
+<small>
+    <%if (gameData.isYourTurn) {%>  Go ahead. It's our turn!
+    <%} else {%>  Waiting on opponent's move.  <%}%>
+</small>
 
 <% for(var row = 0; row < 3; row++){ %>
 <div class="row">
@@ -25,18 +33,23 @@
 <% } %>
 
 <script>
+    gameState = <%- JSON.stringify(gameData.grid)%>;
+    var sendMove = function(row, col){
+        return function(){
+        var xmlhttp=new XMLHttpRequest();
+        var url = "/makemove";
+        var params = "row=" + row + "&col="+ col + "&userid=" + "<%= userid %>";
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xmlhttp.send(params);
+        };};
+
     var divs = document.getElementsByClassName("box");
     for (var i = 0; i < 9; ++i) {
-        var element = divs[i];
-        element.addEventListener("click", function(event) {
-            console.log(this.id + " was clicked!");
-            var xmlhttp=new XMLHttpRequest();
-            var url = "/makemove";
-            var params = "box=" + i + "&userid=" + "<%= userid %>";
-            xmlhttp.open("POST", url, true);
-            xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xmlhttp.send(params);
-        });
+        var row = divs[i].getAttribute("data-row");
+        var col = divs[i].getAttribute("data-col");
+        divs[i].onclick = sendMove(row,col);
+        divs[i].innerText = gameState[row][col];
     }
     //TODO: load game data
 </script>
