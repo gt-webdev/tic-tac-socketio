@@ -4,13 +4,41 @@
     <title>tic-tac-socketio</title>
 </head>
 <body>
-<% for(var x = 0; x< 3; x++){ %>
+<style>
+    .box {
+        height: 200px;
+        width: 200px;
+        background-color: red;
+        border-width: 5px;
+        border: black;
+        border-style: solid;
+    }
+</style>
+<h1>You are: </h1>
+
+<% for(var row = 0; row < 3; row++){ %>
 <div class="row">
-    <%  for(var y = 0; y< 3; y++){ %>
-    <div id="<%= 3*x + y %>"> </div>
-<% } %>
+    <%  for(var col = 0; col< 3; col++){ %>
+    <div class="box" data-row="<%= row %>" data-col="<%= col%>"></div>
+    <% } %>
 </div>
 <% } %>
 
+<script>
+    var divs = document.getElementsByClassName("box");
+    for (var i = 0; i < 9; ++i) {
+        var element = divs[i];
+        element.addEventListener("click", function(event) {
+            console.log(this.id + " was clicked!");
+            var xmlhttp=new XMLHttpRequest();
+            var url = "/makemove";
+            var params = "box=" + i + "&userid=" + "<%= userid %>";
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xmlhttp.send(params);
+        });
+    }
+    //TODO: load game data
+</script>
 </body>
 </html>

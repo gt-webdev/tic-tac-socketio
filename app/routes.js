@@ -7,8 +7,13 @@ module.exports = function(app, gameManager) {
     //  all others become a viewer
     //  (track players by user sessions)
     app.get('/', function(req, res) {
-        res.render('index.ejs');
+        res.render('index.ejs', {userid: req.sessionID});
     });
 
-
+    app.post('/makemove', function(req, res) {
+        var row = req.param['box']/3;
+        var col = req.param['box']%3;
+        var userid = req.param['userid'];
+        gameManager.makeMove(row, col, userid);
+    });
 }
