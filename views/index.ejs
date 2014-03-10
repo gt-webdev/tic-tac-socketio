@@ -18,6 +18,7 @@
         line-height: 150px;
     }
 </style>
+<%if (gameData.win!='-') {%> Game over! <%= gameData.win%> wins! <% }%>
 <h1>You are: <%= gameData.playerName %> </h1>
 <small>
     <%if (gameData.isYourTurn) {%>  Go ahead. It's our turn!

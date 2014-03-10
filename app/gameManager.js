@@ -23,24 +23,25 @@ var gMan = function() {
         if(!playerXID) playerXID = userID;
         else if(!playerOID && userID!=playerXID) playerOID = userID;
         else return; // you are a viewer
-    }
+    };
 
     this.gameData = function (userID) {
         var name = userIDtoSymbol(userID);
         var data = {
             playerName: name,
             grid: boardState,
-            isYourTurn: isCurrentPlayer(name)
+            isYourTurn: isCurrentPlayer(name),
+            win: winner()
         }
         console.log(data);
         return data;
-    }
+    };
 
     var userIDtoSymbol = function(userID) {
         if (userID == playerXID) return 'X';
         else if (userID == playerOID) return 'O';
         else return empty;
-    }
+    };
 
     this.makeMove = function(rowInd, colInd, userID) {
         var player = userIDtoSymbol(userID);
@@ -52,20 +53,20 @@ var gMan = function() {
         }
         console.log("invalid move!")
         return false;
-    }
+    };
 
     var nextTurn = function() {
         if(curPlayer == 'X') curPlayer='O';
         else {curPlayer = 'X'};
-    }
+    };
 
     var isCurrentPlayer = function(player) {
         return player == curPlayer;
-    }
+    };
 
     // Determines whether someone has won the game
     // Returns X if X won, O if O won, or an empty if noone won
-    this.winner = function() {
+    var winner = function() {
         for (var row = 0; row < 3; ++row) {
             if (xOrO(boardState[row])) {
                 return boardState[row][0];
@@ -81,7 +82,7 @@ var gMan = function() {
         if (xOrO(leftDiag)) return leftDiag[0];
         if (xOrO(rightDiag)) return rightDiag[0];
         return empty;
-    }
+    };
 
     // Given an array, checks to see if all the elements in the array are either
     // Player O or X
@@ -92,7 +93,7 @@ var gMan = function() {
             }
         }
         return arr.every(isSameChar('X')) || arr.every(isSameChar('O'));
-    }
+    };
 
 }
 
