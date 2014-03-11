@@ -25,3 +25,4 @@ app.configure(function() {
 require('./app/routes.js')(app, gameManager); // load our routes
 
 app.listen(port);
+console.log("Tic-Tac-Toe started on port "+port);

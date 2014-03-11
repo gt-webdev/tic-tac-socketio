@@ -18,13 +18,17 @@
         line-height: 150px;
     }
 </style>
+<!-- Displays who won (if there is a winner) -->
 <%if (gameData.win!='-') {%> Game over! <%= gameData.win%> wins! <% }%>
+<!-- Displays which player you are: X, O, or - (aka spectator) -->
 <h1>You are: <%= gameData.playerName %> </h1>
 <small>
+    <!-- Tells you whose turn it is -->
     <%if (gameData.isYourTurn) {%>  Go ahead. It's our turn!
     <%} else {%>  Waiting on opponent's move.  <%}%>
 </small>
 
+<!-- Create tic-tac-toe playing field -->
 <% for(var row = 0; row < 3; row++){ %>
 <div class="row">
     <%  for(var col = 0; col< 3; col++){ %>
@@ -34,17 +38,20 @@
 <% } %>
 
 <script>
+    // gameState is a nested 3x3 array representing the game
     gameState = <%- JSON.stringify(gameData.grid)%>;
+    // sendMove is set as the onclick property of each div representing the tic-tac-toe playing field
     var sendMove = function(row, col){
         return function(){
-        var xmlhttp=new XMLHttpRequest();
-        var url = "/makemove";
-        var params = "row=" + row + "&col="+ col + "&userid=" + "<%= userid %>";
-        xmlhttp.open("POST", url, true);
-        xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xmlhttp.send(params);
+            // use ajax to post the move that has been made by the player's click
+            var xmlhttp=new XMLHttpRequest();
+            var url = "/makemove";
+            var params = "row=" + row + "&col="+ col + "&userid=" + "<%= userid %>";
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xmlhttp.send(params);
         };};
-
+    // initialize the divs: set onclick and innerText
     var divs = document.getElementsByClassName("box");
     for (var i = 0; i < 9; ++i) {
         var row = divs[i].getAttribute("data-row");
@@ -52,7 +59,7 @@
         divs[i].onclick = sendMove(row,col);
         divs[i].innerText = gameState[row][col];
     }
-    //TODO: load game data
+
 </script>
 </body>
 </html>

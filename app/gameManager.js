@@ -1,6 +1,5 @@
 //  gameManager
-//  ----game logic
-//  TODO: all the game logic
+//  ----game logic for tic-tac-toe
 var gMan = function() {
     var empty = "-";
     var playerXID = "";
@@ -8,10 +7,9 @@ var gMan = function() {
     var curPlayer = 'X';
     var boardState = [[empty, empty, empty], [empty, empty, empty], [empty, empty, empty]];
 
-    // It has to be the player's turn, and the box has to have no move for the move to be valid.
+    // It has to be the player's turn, and the chosen cell to play on has to be empty for the move to be valid.
+    // takes row and col Indices and player symbol (X, O, or -)
     var moveValid = function(rowInd, colInd, player) {
-        console.log("row: "+rowInd+", col: "+colInd);
-        console.log(boardState);
         if (isCurrentPlayer(player) && boardState[rowInd][colInd] == empty) {
 
             return true;
@@ -19,12 +17,14 @@ var gMan = function() {
         return false;
     };
 
+    //  Sets the player to be either X, O, or - (aka viewer)
     this.assignPlayer = function(userID) {
         if(!playerXID) playerXID = userID;
         else if(!playerOID && userID!=playerXID) playerOID = userID;
         else return; // you are a viewer
     };
 
+    //  generates the data to be passed to and used by index.ejs
     this.gameData = function (userID) {
         var name = userIDtoSymbol(userID);
         var data = {
@@ -33,16 +33,18 @@ var gMan = function() {
             isYourTurn: isCurrentPlayer(name),
             win: winner()
         }
-        console.log(data);
         return data;
     };
 
+    //  converts a given userID to what symbol they are for simplicity/debugging sake (X, O, -)
     var userIDtoSymbol = function(userID) {
         if (userID == playerXID) return 'X';
         else if (userID == playerOID) return 'O';
         else return empty;
     };
 
+    //  attempts to make a move
+    //  returns true if move is successfully made, false otherwise
     this.makeMove = function(rowInd, colInd, userID) {
         var player = userIDtoSymbol(userID);
 
@@ -51,15 +53,17 @@ var gMan = function() {
             nextTurn();
             return true;
         }
-        console.log("invalid move!")
+        console.log("invalid move!");
         return false;
     };
 
+    //  changes whose turn it is
     var nextTurn = function() {
         if(curPlayer == 'X') curPlayer='O';
         else {curPlayer = 'X'};
     };
 
+    //  checks to see if it is a player's turn
     var isCurrentPlayer = function(player) {
         return player == curPlayer;
     };
@@ -97,6 +101,5 @@ var gMan = function() {
 
 }
 
-var ex = new gMan();
-module.exports = ex;
+module.exports = new gMan();
 
